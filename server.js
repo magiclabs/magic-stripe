@@ -4,7 +4,7 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const userRouter = require("./routes/user");
 const cors = require("cors");
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+//const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 app.use(cors({ credentials: true, origin: process.env.CLIENT_URL }));
 app.use(express.json());

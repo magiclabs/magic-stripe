@@ -4,6 +4,7 @@ const router = express.Router();
 const { magic } = require("../lib/magic");
 const jwt = require("jsonwebtoken");
 const { removeTokenCookie, setTokenCookie } = require("../lib/cookie");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 /**
  * 1. verify DID token (proof of authentication)
