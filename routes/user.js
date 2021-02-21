@@ -76,4 +76,58 @@ router.get("/logout", async (req, res) => {
   }
 });
 
+// Add the user to your list of customers
+// Then create a PaymentIntent to track the customer's payment cycle
+router.get("/create-payment-intent", async (req, res) => {
+  const { email } = req.body;
+
+  const paymentIntent = await stripe.customers
+    .create({
+      email,
+    })
+    .then((customer) =>
+      stripe.paymentIntents
+        .create({
+          amount: 50000, // Replace this constant with the price of your service
+          currency: "usd",
+          customer: customer.id,
+        })
+        .catch((error) => console.log("error: ", error))
+    );
+
+  res.send({
+    clientSecret: paymentIntent.client_secret,
+    customer: paymentIntent.customer,
+  });
+});
+
+// Update the customer's info to reflect that they've
+// paid for lifetime access to your Premium Content
+router.get("/update-customer", async (req, res) => {
+  const { customerID } = req.body;
+
+  const customer = await stripe.customers.update(customerID, {
+    metadata: { lifetimeAccess: true },
+  });
+
+  res.send({
+    customer,
+  });
+});
+
+// Collect the customer's information to help validate
+// that they've paid for lifetime access
+router.get("/validate-customer", async (req, res) => {
+  const { email } = req.body;
+
+  const customer = await stripe.customers.list({
+    limit: 1,
+    email,
+  });
+
+  res.send({
+    customer: customer.data,
+  });
+});
+
 module.exports = router;

@@ -19,7 +19,7 @@ const PremiumContent = ({
     if (email && !lifetimeAccessRequestStatus) {
       setLifetimeAccessRequestStatus("Pending");
       window
-        .fetch("http://localhost:8080/validate-customer", {
+        .fetch(`${process.env.REACT_APP_SERVER_URL}/api/validate-customer`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

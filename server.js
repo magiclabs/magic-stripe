@@ -24,6 +24,7 @@ const listener = app.listen(process.env.PORT || 8080, function () {
   console.log("Listening on port " + listener.address().port);
 });
 
+/*
 // Add the user to your list of customers
 // Then create a PaymentIntent to track the customer's payment cycle
 app.post("/create-payment-intent", async (req, res) => {
@@ -48,7 +49,9 @@ app.post("/create-payment-intent", async (req, res) => {
     customer: paymentIntent.customer,
   });
 });
+*/
 
+/*
 // Update the customer's info to reflect that they've
 // paid for lifetime access to your Premium Content
 app.post("/update-customer", async (req, res) => {
@@ -62,7 +65,9 @@ app.post("/update-customer", async (req, res) => {
     customer,
   });
 });
+*/
 
+/*
 // Collect the customer's information to help validate
 // that they've paid for lifetime access
 app.post("/validate-customer", async (req, res) => {
@@ -77,3 +82,4 @@ app.post("/validate-customer", async (req, res) => {
     customer: customer.data,
   });
 });
+*/

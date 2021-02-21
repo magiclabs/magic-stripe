@@ -15,7 +15,7 @@ export default function PaymentForm({ email }) {
 
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
-    fetch("http://localhost:8080/create-payment-intent", {
+    fetch(`${process.env.REACT_APP_SERVER_URL}/api/create-payment-intent`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -75,7 +75,7 @@ export default function PaymentForm({ email }) {
       // Update Stripe customer info to include metadata
       // which will help us determine whether or not they
       // are a Lifetime Access member.
-      fetch("http://localhost:8080/update-customer", {
+      fetch(`${process.env.REACT_APP_SERVER_URL}/api/update-customer`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
