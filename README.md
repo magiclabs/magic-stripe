@@ -23,7 +23,8 @@ https://cryptic-waters-25194.herokuapp.com/
 
 There are two .env files; one for the client and another for the server.
 
-- Grab your `REACT_APP_MAGIC_PUBLISHABLE_KEY` and `MAGIC_SECRET_KEY` from [**Magic's Dashboard**](https://dashboard.magic.link). 
+- Grab your `REACT_APP_MAGIC_PUBLISHABLE_KEY` and `MAGIC_SECRET_KEY` from your [**Magic Dashboard**](https://dashboard.magic.link). 
+- Grab your `REACT_APP_STRIPE_PK_KEY` and `STRIPE_SECRET_KEY` from your [**Stripe Dashboard**](https://dashboard.stripe.com/test/dashboard).
 - Randomly generate a secure 32+ character for `JWT_SECRET`. This is used to sign the JSON web tokens the server issues once a user logs in. You'll also use the secret when you verify the JWT, and if it's altered in any way, the signature will not match when calling `jwt.verify(token)`. A great tool to visualize this is https://jwt.io/.
 
 ### client/.env (client)
