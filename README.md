@@ -1,6 +1,6 @@
 
 # Demo
-https://cryptic-waters-25194.herokuapp.com/
+Here's a demo of the Magic x Stripe app: https://cryptic-waters-25194.herokuapp.com/.
 
 # Quick Start Instructions
 
@@ -23,7 +23,7 @@ https://cryptic-waters-25194.herokuapp.com/
 
 There are two .env files; one for the client and another for the server.
 
-- Grab your `REACT_APP_MAGIC_PUBLISHABLE_KEY` and `MAGIC_SECRET_KEY` from your [**Magic Dashboard**](https://dashboard.magic.link). 
+- Grab your `REACT_APP_MAGIC_PUBLISHABLE_KEY` and `MAGIC_SECRET_KEY` from your [**Magic's Dashboard**](https://dashboard.magic.link). 
 - Grab your `REACT_APP_STRIPE_PK_KEY` and `STRIPE_SECRET_KEY` from your [**Stripe Dashboard**](https://dashboard.stripe.com/test/dashboard).
 - Randomly generate a secure 32+ character for `JWT_SECRET`. This is used to sign the JSON web tokens the server issues once a user logs in. You'll also use the secret when you verify the JWT, and if it's altered in any way, the signature will not match when calling `jwt.verify(token)`. A great tool to visualize this is https://jwt.io/.
 
@@ -43,7 +43,10 @@ CLIENT_URL=http://localhost:3000
 STRIPE_SECRET_KEY=sk_test_XXX
 ```
 
-⚠️ _**Note**: This tutorial was built using Magic UI components. If you swap them out for your own custom CSS, you can delete `@magiclabs/ui` and `framer-motion`from your `client/package.json` dependencies._
+⚠️ **Note**: You'll need to restart your client and server for the new .env values to take effect.
+
+# Magic React Storybook
+This tutorial was built using [**Magic React Storybook**](https://magic-storybook.vercel.app/?path=/story/docs-intro--page). If you wish to swap the Magic UI components out for your own custom CSS, delete `@magiclabs/ui` and `framer-motion`from your `client/package.json` dependencies.
 
 # Tutorial
-[https://magic.link/posts/magic-stripe](https://magic.link/posts/magic-react-express)
+For a step-by-step tutorial on how to integrate Magic with Stripe: [https://magic.link/posts/magic-stripe](https://magic.link/posts/magic-react-express). 🪄🍰
