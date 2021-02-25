@@ -1406,11 +1406,6 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@magic-ext/webauthn@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@magic-ext/webauthn/-/webauthn-0.1.0.tgz#1fb65e59786c09733da6fa863b186473a179cf9e"
-  integrity sha512-d3nd6oW/44Ivk5qcCVSu07YOKkoOwjDKxan3iS4fASUv4JjXbwfCQ1LOggQ0AMEGAh5czMvfsloq4EN9MjoszA==
-
 "@magic-sdk/commons@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@magic-sdk/commons/-/commons-1.1.0.tgz#253fbbb8846b79e8defacda68ac30b0ac3581e7c"

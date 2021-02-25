@@ -1,86 +1,59 @@
-import { useState, useEffect } from "react";
-import { Magic } from "magic-sdk";
-import { WebAuthnExtension } from "@magic-ext/webauthn";
-import Layout from "./layout";
-import SignUpForm from "./signup-form";
+import { useState, useEffect, useContext } from "react";
 import { useHistory } from "react-router-dom";
+import { magic } from "../lib/magic";
+import { UserContext } from "../lib/UserContext";
+import SignUpForm from "./signup-form";
 
 const SignUp = () => {
   const history = useHistory();
-  const [magic, setMagic] = useState(null);
   const [disabled, setDisabled] = useState(false);
-
-  useEffect(() => {
-    !magic &&
-      setMagic(
-        new Magic(process.env.REACT_APP_MAGIC_PUBLISHABLE_KEY, {
-          extensions: [new WebAuthnExtension()],
-        })
-      );
-    magic?.preload();
-  }, [magic]);
+  const [, setUser] = useContext(UserContext);
 
   async function handleSignUpWithEmail(email) {
     try {
       setDisabled(true); // Disable sign up button to prevent multiple emails from being triggered
+
+      // Trigger Magic link to be sent to user
       let didToken = await magic.auth.loginWithMagicLink({
         email,
       });
-      authenticateWithServer(didToken);
+
+      // Validate didToken with server
+      const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + didToken,
+        },
+      });
+
+      if (res.status === 200) {
+        // Set the UserContext to the now signed up user
+        let userMetadata = await magic.user.getMetadata();
+        await setUser(userMetadata);
+        history.push("/payment");
+      }
     } catch (error) {
       setDisabled(false); // Re-enable sign up button - user may have requested to edit their email
       console.log(error);
     }
   }
 
-  // Try to sign up with webauthn
-  // If that fails, revert to signing up with WebAuthn
-  async function handleSignUpWithWebauthn(email) {
-    try {
-      let didToken = await magic.webauthn.login({ username: email });
-      authenticateWithServer(didToken);
-    } catch (error) {
-      try {
-        let didToken = await magic.webauthn.registerNewUser({
-          username: email,
-        });
-        authenticateWithServer(didToken);
-      } catch (err) {
-        alert(
-          "Failed to authenticate. Must be using a supported device and a username not already taken."
-        );
-        console.log(err);
-      }
-    }
-  }
-
-  async function authenticateWithServer(didToken) {
-    const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + didToken,
-      },
-      credentials: "include",
-    });
-    res.status === 200 && history.push("/payment");
-  }
-
   return (
-    <Layout>
-            <h3 className="form-header">Sign Up for Lifetime Access Pass 👩🏻‍💻</h3>
+    <>
+      <h3 className="h3-header">Sign Up for Lifetime Access Pass 👩🏻‍💻</h3>
       <p>
-        YAY! We're excited for you to sign up for a Lifetime Access
-        Pass to awesomeness. First, please sign in below to register your new account:
+        YAY! We're excited for you to sign up for a Lifetime Access Pass to
+        awesomeness. First, please sign in below to register your new account:
       </p>
       <div className="signup">
-        <SignUpForm
-          disabled={disabled}
-          onEmailSubmit={handleSignUpWithEmail}
-          onWebauthnSubmit={handleSignUpWithWebauthn}
-        />
+        <SignUpForm disabled={disabled} onEmailSubmit={handleSignUpWithEmail} />
       </div>
       <style>{`
+        .h3-header {
+          font-size: 22px;
+          margin: 25px 0;
+        }
         .signup {
           max-width: 20rem;
           margin: 40px auto 0;
@@ -92,7 +65,7 @@ const SignUp = () => {
           box-sizing: border-box;
         }
       `}</style>
-    </Layout>
+    </>
   );
 };
 

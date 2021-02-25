@@ -1,27 +1,34 @@
-import Layout from "./layout";
-import { useUser } from "../lib/hooks";
+import { useContext, useEffect } from "react";
+import { useHistory } from "react-router";
+import { UserContext } from "../lib/UserContext";
+import Loading from "./loading";
 
 export default function Payment({ Elements, PaymentForm, promise }) {
-  const user = useUser();
-  const person = user && user.email ? user.email : "";
+  const [user] = useContext(UserContext);
+  const history = useHistory();
+
+  // If not loading and no user found, redirect to /login
+  useEffect(() => {
+    user && !user.loading && !user.issuer && history.push("/login");
+  }, [user, history]);
 
   return (
-    <div>
-      <Layout>
-        <h3 className="h3-header">Purchase Lifetime Access Pass to Awesomeness 🤩</h3>
-        <p>
-          Hi again {person}! You successfully signed up with your email. Please
-          enter your card information below to purchase your Lifetime Access
-          Pass securely via Stripe:
-        </p>
-        {user ? (
-          <Elements stripe={promise}>
-            <PaymentForm email={user.email} />
-          </Elements>
-        ) : (
-          "Waiting for user info..."
-        )}
-      </Layout>
+    <>
+      <h3 className="h3-header">
+        Purchase Lifetime Access Pass to Awesomeness 🤩
+      </h3>
+      <p>
+        Hi again {user?.loading ? <Loading /> : user?.email}! You successfully
+        signed up with your email. Please enter your card information below to
+        purchase your Lifetime Access Pass securely via Stripe:
+      </p>
+      {user?.loading ? (
+        <Loading />
+      ) : (
+        <Elements stripe={promise}>
+          <PaymentForm email={user.email} />
+        </Elements>
+      )}
       <style>{`
         p {
           margin-bottom: 15px;
@@ -31,6 +38,6 @@ export default function Payment({ Elements, PaymentForm, promise }) {
           margin: 25px 0;
         }
       `}</style>
-    </div>
+    </>
   );
 }

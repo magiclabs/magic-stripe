@@ -1,31 +1,18 @@
 import { useState } from "react";
-import Webauthn from "./webauthn";
-import { validateEmail } from "../lib/helpers";
-import {
-  Input,
-  Icon,
-  MonochromeIcons,
-  useToast,
-  CallToAction,
-} from "@magiclabs/ui";
+import { Input, Icon, MonochromeIcons, CallToAction } from "@magiclabs/ui";
 
-const SignUpForm = ({ onEmailSubmit, disabled, onWebauthnSubmit }) => {
+const SignUpForm = ({ onEmailSubmit, disabled }) => {
   const [email, setEmail] = useState("");
-  const { createToast } = useToast();
-
-  const addToast = () => {
-    createToast({ message: "Invalid email", type: "error", lifespan: 2000 });
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    !email || !validateEmail(email) ? addToast() : onEmailSubmit(email);
+    onEmailSubmit(email);
   };
 
   return (
     <>
-      <h3 className="form-header">Sign Up</h3>
       <form onSubmit={handleSubmit}>
+        <h3 className="form-header">Sign Up</h3>
         <div className="input-wrapper">
           <Input
             placeholder="Enter your email"
@@ -36,7 +23,7 @@ const SignUpForm = ({ onEmailSubmit, disabled, onWebauthnSubmit }) => {
             prefix={<Icon inline type={MonochromeIcons.Envelope} size={22} />}
           />
         </div>
-        <div className="submit">
+        <div>
           <CallToAction
             leadingIcon={MonochromeIcons.PaperPlane}
             color="primary"
@@ -46,11 +33,6 @@ const SignUpForm = ({ onEmailSubmit, disabled, onWebauthnSubmit }) => {
           >
             Sign up
           </CallToAction>
-          <Webauthn
-            onSubmit={onWebauthnSubmit}
-            email={email}
-            addToast={addToast}
-          />
         </div>
       </form>
       <style>{`
@@ -61,13 +43,7 @@ const SignUpForm = ({ onEmailSubmit, disabled, onWebauthnSubmit }) => {
         }
         .input-wrapper {
           width: 87%;
-          margin: 0 auto;
-        }
-        .submit {
-          display: flex;
-          justify-content: space-between;
-          width: 87%;
-          margin: 20px auto 0;
+          margin: 0 auto 20px;
         }
       `}</style>
     </>

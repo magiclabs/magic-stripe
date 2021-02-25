@@ -1,25 +1,12 @@
 import { useState } from "react";
-import Webauthn from "./webauthn";
-import { validateEmail } from "../lib/helpers";
-import {
-  Input,
-  Icon,
-  MonochromeIcons,
-  useToast,
-  CallToAction,
-} from "@magiclabs/ui";
+import { Input, Icon, MonochromeIcons, CallToAction } from "@magiclabs/ui";
 
-const LoginForm = ({ onEmailSubmit, disabled, onWebauthnSubmit }) => {
+const LoginForm = ({ onEmailSubmit, disabled }) => {
   const [email, setEmail] = useState("");
-  const { createToast } = useToast();
-
-  const addToast = () => {
-    createToast({ message: "Invalid email", type: "error", lifespan: 2000 });
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    !email || !validateEmail(email) ? addToast() : onEmailSubmit(email);
+    onEmailSubmit(email);
   };
 
   return (
@@ -36,7 +23,7 @@ const LoginForm = ({ onEmailSubmit, disabled, onWebauthnSubmit }) => {
             prefix={<Icon inline type={MonochromeIcons.Envelope} size={22} />}
           />
         </div>
-        <div className="submit">
+        <div>
           <CallToAction
             leadingIcon={MonochromeIcons.PaperPlane}
             color="primary"
@@ -46,33 +33,17 @@ const LoginForm = ({ onEmailSubmit, disabled, onWebauthnSubmit }) => {
           >
             Log in
           </CallToAction>
-          <Webauthn
-            onSubmit={onWebauthnSubmit}
-            email={email}
-            addToast={addToast}
-          />
         </div>
       </form>
       <style>{`
         form,
-        label {
-          display: flex;
-          flex-flow: column;
-          text-align: center;
-        }
         .form-header {
           font-size: 22px;
           margin: 25px 0;
         }
         .input-wrapper {
           width: 87%;
-          margin: 0 auto;
-        }
-        .submit {
-          display: flex;
-          justify-content: space-between;
-          width: 87%;
-          margin: 20px auto 0;
+          margin: 0 auto 20px;
         }
       `}</style>
     </>

@@ -1,10 +1,28 @@
-import { useUser } from "../lib/hooks";
-import { CallToAction, TextButton } from "@magiclabs/ui";
+import { useContext } from "react";
 import { useHistory } from "react-router-dom";
+import { UserContext } from "../lib/UserContext";
+import { LifetimeContext } from "../lib/LifetimeContext";
+import { LifetimeAccessRequestStatusContext } from "../lib/LifetimeAccessRequestStatusContext";
+import { CallToAction, TextButton } from "@magiclabs/ui";
+import { magic } from "../lib/magic";
 
 const Header = () => {
-  const user = useUser();
   const history = useHistory();
+  const [user, setUser] = useContext(UserContext);
+  const [, setLifetimeAccess] = useContext(LifetimeContext);
+  const [
+    lifetimeAccessRequestStatus,
+    setLifetimeAccessRequestStatus,
+  ] = useContext(LifetimeAccessRequestStatusContext);
+
+  const logout = () => {
+    magic.user.logout().then(() => {
+      setUser({ user: null });
+      setLifetimeAccess(false);
+      setLifetimeAccessRequestStatus("");
+      history.push("/login");
+    });
+  };
 
   return (
     <header>
@@ -28,7 +46,10 @@ const Header = () => {
               Premium Content
             </TextButton>
           </li>
-          {user ? (
+          {user?.loading ? (
+            // If loading, don't display any buttons specific to the loggedIn state
+            <div style={{ height: "38px" }}></div>
+          ) : user?.issuer ? (
             <>
               <li>
                 <TextButton
@@ -40,11 +61,9 @@ const Header = () => {
                 </TextButton>
               </li>
               <li>
-                <a href={`${process.env.REACT_APP_SERVER_URL}/api/logout`}>
-                  <TextButton color="primary" size="sm">
-                    Logout
-                  </TextButton>
-                </a>
+                <TextButton color="warning" size="sm" onPress={logout}>
+                  Logout
+                </TextButton>
               </li>
             </>
           ) : (
@@ -78,9 +97,6 @@ const Header = () => {
         }
         li:first-child {
           margin-left: auto;
-        }
-        li > a {
-          text-decoration: none;
         }
       `}</style>
     </header>

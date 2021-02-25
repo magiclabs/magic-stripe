@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useHistory } from "react-router-dom";
+import { LifetimeContext } from "../lib/LifetimeContext";
 
 export default function PaymentForm({ email }) {
   const [succeeded, setSucceeded] = useState(false);
@@ -12,10 +13,11 @@ export default function PaymentForm({ email }) {
   const stripe = useStripe();
   const elements = useElements();
   const history = useHistory();
+  const [, setLifetimeAccess] = useContext(LifetimeContext);
 
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
-    fetch(`${process.env.REACT_APP_SERVER_URL}/api/create-payment-intent`, {
+    fetch(`${process.env.REACT_APP_SERVER_URL}/create-payment-intent`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -28,6 +30,7 @@ export default function PaymentForm({ email }) {
       .then((data) => {
         setClientSecret(data.clientSecret);
         setCustomerID(data.customer);
+        setLifetimeAccess(true);
       });
   }, [email]);
 
@@ -75,7 +78,7 @@ export default function PaymentForm({ email }) {
       // Update Stripe customer info to include metadata
       // which will help us determine whether or not they
       // are a Lifetime Access member.
-      fetch(`${process.env.REACT_APP_SERVER_URL}/api/update-customer`, {
+      fetch(`${process.env.REACT_APP_SERVER_URL}/update-customer`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

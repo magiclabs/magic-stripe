@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@magic-ext/webauthn": "^0.1.0",
     "@magiclabs/ui": "0.8.0",
     "@stripe/react-stripe-js": "^1.2.2",
     "@stripe/stripe-js": "^1.12.1",
@@ -12,7 +11,6 @@
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
-    "swr": "^0.3.9",
     "web-vitals": "^0.2.4",
     "yarn": "^1.22.10"
   },
