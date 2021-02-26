@@ -33,8 +33,9 @@ const Login = () => {
       });
 
       if (res.status === 200) {
-        // Set the UserContext to the now logged in user
+        // Get info for the logged in user
         let userMetadata = await magic.user.getMetadata();
+        // Set the UserContext to the now logged in user
         await setUser(userMetadata);
         history.push("/profile");
       }

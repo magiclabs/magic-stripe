@@ -21,14 +21,20 @@ import { magic } from "./lib/magic";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 
-function App() {
-  const promise = loadStripe(process.env.REACT_APP_STRIPE_PK_KEY);
+// Make sure to call loadStripe outside of a component’s render to avoid
+// recreating the Stripe object on every render.
+// loadStripe is initialized with your real test publishable API key.
+const promise = loadStripe(process.env.REACT_APP_STRIPE_PK_KEY);
 
+function App() {
+  // Create a hook to check whether or not user has lifetime acess
   const [lifetimeAccess, setLifetimeAccess] = useState(false);
+  // Create a hook to prevent infinite loop in useEffect inside of /components/premium-content
   const [
     lifetimeAccessRequestStatus,
     setLifetimeAccessRequestStatus,
   ] = useState("");
+  // Create a hook to help us determine whether or not the  user is logged in
   const [user, setUser] = useState();
 
   // If isLoggedIn is true, set the UserContext with user data

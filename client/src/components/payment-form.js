@@ -9,11 +9,13 @@ export default function PaymentForm({ email }) {
   const [processing, setProcessing] = useState("");
   const [disabled, setDisabled] = useState(true);
   const [clientSecret, setClientSecret] = useState("");
+
   const [customerID, setCustomerID] = useState("");
+  const [, setLifetimeAccess] = useContext(LifetimeContext);
+
   const stripe = useStripe();
   const elements = useElements();
   const history = useHistory();
-  const [, setLifetimeAccess] = useContext(LifetimeContext);
 
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
